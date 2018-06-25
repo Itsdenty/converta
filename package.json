@@ -1,0 +1,40 @@
+{
+  "name": "converta",
+  "version": "1.0.0",
+  "description": "An app for converting money from one currency to another",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dashboard webpack-dev-server --history-api-fallback --inline --progress",
+    "predeploy": "webpack-dashboard -- webpack --env production",
+    "deploy": "gh-pages -d build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kantologist/converta.git"
+  },
+  "author": "Femi Azeez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kantologist/converta/issues"
+  },
+  "homepage": "https://github.com/kantologist/converta#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^0.28.11",
+    "dotenv": "^6.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.12.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dashboard": "^2.0.0",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "dependencies": {
+    "gh-pages": "^1.2.0",
+    "webpack-merge": "^4.1.3"
+  }
+}
