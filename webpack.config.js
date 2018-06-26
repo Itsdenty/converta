@@ -1,6 +1,8 @@
 const HtmlWebpacklugin = require('html-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 const merge = require('webpack-merge');
 
 const commonConfig =merge([
@@ -34,10 +36,15 @@ const commonConfig =merge([
         plugins: [
             new HtmlWebpacklugin({
                 template: __dirname + '/public/index.html',
-                injext: 'body'
+                inject: 'body'
             }),
             new DashboardPlugin(),
-            new ExtractTextPlugin("style.css")
+            new ExtractTextPlugin("style.css"),
+            new CopyWebpackPlugin([
+                {from: __dirname + "/images"},
+                {from:__dirname + "/js/sw.js", to: './'},
+            ]),
+            new WriteFilePlugin()
         ]
     }
 ]);

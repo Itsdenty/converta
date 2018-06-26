@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dashboard webpack-dev-server --history-api-fallback --inline --progress",
-    "predeploy": "webpack-dashboard -- webpack --env production",
-    "deploy": "gh-pages -d build"
+    "predeploy": "webpack --env production",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
     "dotenv": "^6.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -31,10 +32,12 @@
     "webpack": "^4.12.1",
     "webpack-cli": "^3.0.8",
     "webpack-dashboard": "^2.0.0",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4",
+    "write-file-webpack-plugin": "^4.3.2"
   },
   "dependencies": {
     "gh-pages": "^1.2.0",
+    "idb": "^2.1.3",
     "webpack-merge": "^4.1.3"
   }
 }
