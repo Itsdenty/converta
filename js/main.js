@@ -68,6 +68,7 @@ const openDataBase = () => {
 
 
 const fetchCurrenciesLocally =  () => {
+    console.log("local");
     openDataBase().then((db) => {
     if (!db || currencyFrom.children.length > 0) return;
     const store = db.transaction('currencies').objectStore('currencies');
@@ -89,6 +90,7 @@ const fetchCurrenciesLocally =  () => {
 };
 
 const fetchCurrenciesOnline = () => {
+    console.log("Online");
     fetch(`${baseUrl}/api/v5/currencies`)
         .then(
             (response) => {
@@ -106,18 +108,7 @@ const fetchCurrenciesOnline = () => {
                         store.put(currencies[currencyKey]);
                     })
                 });
-                for (let currency in currencies) {
-                    const opt = document.createElement("option");
-                    opt.value = currencies[currency].id;
-                    opt.innerHTML = currencies[currency].id;
-
-                    const opt2 = document.createElement("option");
-                    opt2.value = currencies[currency].id;
-                    opt2.innerHTML = currencies[currency].id;
-
-                    currencyFrom.appendChild(opt);
-                    currencyTo.appendChild(opt2);
-                }
+                fetchCurrenciesLocally()
             }
         ).catch((error) => {
         console.log(error)
@@ -125,19 +116,22 @@ const fetchCurrenciesOnline = () => {
 };
 
 fetchCurrenciesLocally();
-if (currencyFrom.children.length == 0) {
+console.log(currencyFrom.options.length);
+if (currencyFrom.options.length == 0) {
+    console.log("from online");
     fetchCurrenciesOnline();
 }
 
 
 click.onclick = (event) => {
-    fetch(`${baseUrl}/api/v5/convert?q=${currencyFrom.value},${currencyTo.value}&compact=ultra`)
+    fetch(`${baseUrl}/api/v5/convert?q=${currencyFrom.value}_${currencyTo.value}&compact=ultra`)
         .then(
             (response) => {
                 return response.json()
             }).then(
         (data) => {
-            alert(`$data`)
+            console.log(data);
+            alert(`${data}`)
         }
     ).catch((error) => {
         console.log(error)

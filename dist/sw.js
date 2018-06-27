@@ -39,7 +39,7 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('message', function(event) {
     if (event.data.action === 'skipWaiting') {
         self.registration.showNotification("New Version available", {
-            actions: [{action: "refresh", title: "dismiss"}]
+            actions: [{title: "refresh", title: "dismiss"}]
         });
     }
 });
