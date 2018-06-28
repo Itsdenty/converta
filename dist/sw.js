@@ -1,4 +1,4 @@
-let staticacheName = 'converta-static-v2';
+let staticacheName = 'converta-static-v3';
 
 self.addEventListener('install', (event) => {
     const urlsToCache = [
@@ -28,12 +28,28 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+const handleErrors = (response) => {
+    if(!response) {
+        throw Error(response.statusText);
+    }
+    return response;
+};
+
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((response) =>{
-            return response || fetch(event.request);
+            return response || fetch(event.request).then(handleErrors)
+                .catch((error) => {console.log(error)});
         })
     )
+});
+
+
+
+window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(error) {
+        self.registration.showNotification("Please clear some space on your device");
+    });
 });
 
 self.addEventListener('message', function(event) {

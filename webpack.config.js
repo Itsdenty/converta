@@ -56,10 +56,15 @@ const productionConfig = merge([
             filename: 'bundle.js',
             publicPath: '/converta'
         },
+
+        mode: 'production'
     }
 ]);
 
 const developmentConfig = merge([
+    {
+        mode: 'development'
+    }
 
 ]);
 

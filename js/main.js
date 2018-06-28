@@ -84,14 +84,27 @@ const fetchCurrenciesLocally =  () => {
 
             currencyFrom.appendChild(opt);
             currencyTo.appendChild(opt2);
-        })
+
+        });
+        console.log(currencyFrom.options.length);
+        if (currencyFrom.options.length == 0) {
+            fetchCurrenciesOnline();
+        }
     })
     });
+};
+
+const handleErrors = (response) => {
+    if(!response) {
+        throw Error(response.statusText);
+    }
+    return response;
 };
 
 const fetchCurrenciesOnline = () => {
     console.log("Online");
     fetch(`${baseUrl}/api/v5/currencies`)
+        .then(handleErrors)
         .then(
             (response) => {
                 return response.json()
@@ -108,7 +121,20 @@ const fetchCurrenciesOnline = () => {
                         store.put(currencies[currencyKey]);
                     })
                 });
-                fetchCurrenciesLocally()
+                Object.keys(currencies).forEach((currencyKey) => {
+                    let currency = currencies[currencyKey];
+                    const opt = document.createElement("option");
+                    opt.value = currency.id;
+                    opt.innerHTML = currency.id;
+
+                    const opt2 = document.createElement("option");
+                    opt2.value = currency.id;
+                    opt2.innerHTML = currency.id;
+
+                    currencyFrom.appendChild(opt);
+                    currencyTo.appendChild(opt2);
+
+                });
             }
         ).catch((error) => {
         console.log(error)
@@ -116,11 +142,6 @@ const fetchCurrenciesOnline = () => {
 };
 
 fetchCurrenciesLocally();
-console.log(currencyFrom.options.length);
-if (currencyFrom.options.length == 0) {
-    console.log("from online");
-    fetchCurrenciesOnline();
-}
 
 
 click.onclick = (event) => {
