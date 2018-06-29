@@ -53,7 +53,7 @@ const trackInstalling = (worker) => {
     });
 };
 
-const openDataBase = () => {
+const openCurrencyDataBase = () => {
     if (!navigator.serviceWorker) {
         return Promise.resolve();
     }
@@ -65,64 +65,28 @@ const openDataBase = () => {
     })
 };
 
+const openConversionDataBase = () => {
+    if (!navigator.serviceWorker) {
+        return Promise.resolve();
+    }
+
+    return idb.open('conversion', 1, (upgradeDb) => {
+        const store = upgradeDb.createObjectStore('conversions', {
+            keyPath: 'id'
+        })
+    })
+};
+
 
 
 const fetchCurrenciesLocally =  () => {
     console.log("local");
-    openDataBase().then((db) => {
-    if (!db || currencyFrom.children.length > 0) return;
-    const store = db.transaction('currencies').objectStore('currencies');
-    return store.getAll().then((currencies) => {
-        currencies.forEach((currency) => {
-            const opt = document.createElement("option");
-            opt.value = currency.id;
-            opt.innerHTML = currency.id;
-
-            const opt2 = document.createElement("option");
-            opt2.value = currency.id;
-            opt2.innerHTML = currency.id;
-
-            currencyFrom.appendChild(opt);
-            currencyTo.appendChild(opt2);
-
-        });
-        console.log(currencyFrom.options.length);
-        if (currencyFrom.options.length == 0) {
-            fetchCurrenciesOnline();
-        }
-    })
-    });
-};
-
-const handleErrors = (response) => {
-    if(!response) {
-        throw Error(response.statusText);
-    }
-    return response;
-};
-
-const fetchCurrenciesOnline = () => {
-    console.log("Online");
-    fetch(`${baseUrl}/api/v5/currencies`)
-        .then(handleErrors)
-        .then(
-            (response) => {
-                return response.json()
-            })
-        .then(
-            (data) => {
-                // console.log(data.results);
-                let currencies = data.results;
-                openDataBase().then((db) => {
-                    if (!db) return;
-                    const tx = db.transaction('currencies', 'readwrite');
-                    const store = tx.objectStore('currencies');
-                    Object.keys(currencies).forEach((currencyKey) => {
-                        store.put(currencies[currencyKey]);
-                    })
-                });
-                Object.keys(currencies).forEach((currencyKey) => {
-                    let currency = currencies[currencyKey];
+    if (currencyFrom.options.length == 0) {
+        openCurrencyDataBase().then((db) => {
+            if (!db || currencyFrom.children.length > 0) return;
+            const store = db.transaction('currencies').objectStore('currencies');
+            return store.getAll().then((currencies) => {
+                currencies.forEach((currency) => {
                     const opt = document.createElement("option");
                     opt.value = currency.id;
                     opt.innerHTML = currency.id;
@@ -135,27 +99,104 @@ const fetchCurrenciesOnline = () => {
                     currencyTo.appendChild(opt2);
 
                 });
+                console.log(currencyFrom.options.length);
+                if (currencyFrom.options.length == 0) {
+                    fetchCurrenciesOnline();
+                }
+            })
+        });
+    }
+};
+
+const handleErrors = (response) => {
+    if(!response) {
+        throw Error(response.statusText);
+    }
+    return response;
+};
+
+const fetchCurrenciesOnline = () => {
+    console.log("Online");
+    fetchCurrenciesLocally();
+    fetch(`${baseUrl}/api/v5/currencies`)
+        .then(handleErrors)
+        .then(
+            (response) => {
+                return response.json()
+            })
+        .then(
+            (data) => {
+                // console.log(data.results);
+                let currencies = data.results;
+                openCurrencyDataBase().then((db) => {
+                    if (!db) return;
+                    const tx = db.transaction('currencies', 'readwrite');
+                    const store = tx.objectStore('currencies');
+                    let currencyList = Object.keys(currencies);
+                    let convertKeys = [];
+                    currencyList.forEach((currencyKey) => {
+                        store.put(currencies[currencyKey]);
+                        let others = currencyList.filter((element, index) => {
+                            return index > currencyList.indexOf(currencyKey);
+                        });
+                        others.forEach((other) => {
+                           convertKeys.push(`${currencyKey}_${other}`);
+                        })
+                    });
+                    // console.log(convertKeys);
+                });
+                fetchCurrenciesLocally()
             }
         ).catch((error) => {
         console.log(error)
     });
 };
 
-fetchCurrenciesLocally();
+fetchCurrenciesOnline();
+
+const convertLocal = (key) => {
+    openConversionDataBase().then((db) => {
+        if (!db) return;
+        const store = db.transaction('conversions').objectStore('conversions');
+        return store.get(key).then((rate) => {
+            if(rate != null){
+                return rate[key];
+            } else {
+                return null;
+            }
+        })
+    })
+};
 
 
 click.onclick = (event) => {
-    fetch(`${baseUrl}/api/v5/convert?q=${currencyFrom.value}_${currencyTo.value}&compact=ultra`)
-        .then(
-            (response) => {
-                return response.json()
-            }).then(
-        (data) => {
-            console.log(data);
-            alert(`${data}`)
-        }
-    ).catch((error) => {
-        console.log(error)
-    })
+    if(currencyFrom.value != currencyTo.value){
+        const rate = convertLocal(`${currencyFrom.value}_${currencyTo.value}`);
+        console.log(rate);
+        fetch(`${baseUrl}/api/v5/convert?q=${currencyFrom.value}_${currencyTo.value}&compact=ultra`)
+            .then(
+                (response) => {
+                    return response.json()
+                }).then(
+            (data) => {
+                let keys = Object.keys(data);
+                // console.log(keys);
+                openConversionDataBase().then((db) => {
+                    if(!db) return;
+                    const tx = db.transaction('conversions', 'readwrite');
+                    const store = tx.objectStore('conversions');
+                    keys.forEach((key) => {
+                        store.put({id:key, data:data})
+                    })
+                });
+                const rate = convertLocal(`${currencyFrom.value}_${currencyTo.value}`);
+                console.log(rate);
+            }
+        ).catch((error) => {
+            console.log(error)
+        })
+    } else {
+        console.log("same currency");
+    }
 };
 
