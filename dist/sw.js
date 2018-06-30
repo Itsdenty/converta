@@ -46,7 +46,7 @@ self.addEventListener('fetch', (event) => {
 
 
 
-window.addEventListener('load', function() {
+self.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js').catch(function(error) {
         self.registration.showNotification("Please clear some space on your device");
     });
@@ -55,7 +55,7 @@ window.addEventListener('load', function() {
 self.addEventListener('message', function(event) {
     if (event.data.action === 'skipWaiting') {
         self.registration.showNotification("New Version available", {
-            actions: [{title: "refresh", title: "dismiss"}]
+            actions: [{action: "refresh", title: "refresh"}, {action:"dismiss", title:"dismiss"}]
         });
     }
 });
@@ -65,4 +65,4 @@ self.addEventListener('notificationclick', function(event) {
     if (event.action === 'refresh') {
         self.skipWaiting();
     }
-}, false);
+    }, false);

@@ -7,13 +7,36 @@
 
 <link href="/style.css" rel="stylesheet"></head>
 <body>
-    <h1>Hello, I'm a currency converter</h1>
-    <form role="form">
-        <h4>Enter Amount to convert</h4>
-        <input id="from" type="number" placeholder="0">
-        <select id="currency_from" name="currencyFrom"></select>
-        <select id="currency_to" name="currencyTo"></select>
-    </form>
-    <button id="click"> Convert</button>
+<div class="container">
+    <div class="header">
+        <h1> Currency Converter</h1>
+    </div>
+    <!-- From half-->
+    <div class="fromHalf">
+        <div class="fromHeader">
+            <h2>Convert From</h2>
+        </div>
+        <div class="from">
+            <select id="currency_from" name="currencyFrom"></select>
+            <input id="from" type="number" value="0" placeholder="0">
+        </div>
+    </div>
+
+    <!-- To half-->
+    <div class="toHalf">
+        <div class="toHeader">
+            <h2>Convert To</h2>
+        </div>
+        <div class="to">
+            <select id="currency_to" name="currencyTo"></select>
+            <input id="to" type="number" disabled>
+        </div>
+    </div>
+
+    <div class="convert">
+        <button id="convert"> Convert</button>
+    </div>
+
+</div>
 <script type="text/javascript" src="/bundle.js"></script></body>
 </html>

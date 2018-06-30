@@ -1,6 +1,139 @@
-h1 {
-    color: green;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+body {
+    background-color: burlywood;
+}
+
+.container {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 600px;
+    height: 250px;
+    background-color: cornflowerblue;
+    border-radius: 50px;
+    text-align: center;
+}
+
+.header {
+    position: relative;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 600px;
+    height: 80px;
+    background-color: cadetblue;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    text-align: center;
+    border-bottom: 2px dotted #cccccc;
+}
+
+.header h1 {
+    padding-top: 20px;
+    color: white;
+    font-size: 40px;
+}
+
+.fromHalf {
+    float: left;
+    color: green;
+    width: 50%;
+}
+
+.fromHeader {
+    background-color: green;
+    color: #000;
+    border-right: 2px dotted #cccccc;
+    margin-bottom: 20px;
+}
+
+.fromHeader h2 {
+    color: white;
+}
+
+
+.toHalf {
+    float: right;
+    color: green;
+    width: 50%;
+}
+
+.toHeader {
+    background-color: green;
+    color: #000;
+    border-left: 2px dotted #cccccc;
+    margin-bottom: 20px;
+}
+
+.toHeader h2 {
+    color: white;
+}
+
+select {
+    background-color: green;
+    overflow: hidden;
+    width: 200px;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+}
+
+option {
+    background-color: green;
+    cursor: pointer;
+}
+
+input[type="number"] {
+    background-color: green;
+    width: 200px;
+    height: 30px;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    font-size: 20px;
+}
+
+.convert button{
+    width: 70px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    background-color: green;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+}
+
+:-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+}
+
+.clearfix {
+    clear: both;
+}
+
 
 input:not(:focus):invalid {
     outline: 2px solid red;
@@ -8,3 +141,4 @@ input:not(:focus):invalid {
 input:focus:invalid {
     outline: 2px solid blue;
 }
+
