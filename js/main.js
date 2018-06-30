@@ -12,7 +12,7 @@ const baseUrl = "https://free.currencyconverterapi.com";
 // register service worker
 if('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then((reg) => {
+        navigator.serviceWorker.register('sw.js').then((reg) => {
             if (!navigator.serviceWorker.controller) {
                 return;
             }
