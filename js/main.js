@@ -35,14 +35,7 @@ if('serviceWorker' in navigator) {
 }
 
 // ask for notification permission
-Notification.requestPermission().then(function(result) {
-    if (result === 'denied') {
-        return;
-    }
-    if (result === 'default') {
-        return;
-    }
-});
+Notification.requestPermission();
 
 
 const updateReady = (worker) => {
