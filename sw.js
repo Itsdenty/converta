@@ -1,4 +1,4 @@
-let staticacheName = 'converta-static-v3';
+let staticacheName = 'converta-static-v4';
 
 self.addEventListener('install', (event) => {
     const urlsToCache = [
