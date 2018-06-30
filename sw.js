@@ -3,6 +3,7 @@ let staticacheName = 'converta-static-v3';
 self.addEventListener('install', (event) => {
     const urlsToCache = [
        '/',
+        'index.html',
         'bundle.js',
         'style.css'
     ];
