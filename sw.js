@@ -39,6 +39,7 @@ const handleErrors = (response) => {
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((response) =>{
+            console.log(response);
             return response || fetch(event.request).then(handleErrors)
                 .catch((error) => {console.log(error)});
         })
