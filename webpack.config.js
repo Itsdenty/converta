@@ -41,7 +41,6 @@ const commonConfig =merge([
             new DashboardPlugin(),
             new ExtractTextPlugin("style.css"),
             new CopyWebpackPlugin([
-                {from: __dirname + "/images"},
                 {from:__dirname + "/js/sw.js", to: './'},
             ]),
             new WriteFilePlugin()
